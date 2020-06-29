@@ -28,7 +28,7 @@ namespace _2mGame
         int down = 1;
         //Distance variable
         int playerDist = 10;
-        int airborne = 3;
+        int airborne = 1;
       
         //code to find and use image and give properties from class Shop
         Shop shelf;
@@ -37,6 +37,7 @@ namespace _2mGame
         Shop corona;
         const int NUMBER_OF_FOOD = 10;
         Shop[] yum = new Shop[NUMBER_OF_FOOD];
+        
 
         Bitmap sh = _2mGame.Properties.Resources.shelf;
         Bitmap shb = _2mGame.Properties.Resources.redCircle;
@@ -60,17 +61,16 @@ namespace _2mGame
             //player and covid spawner
             Player = new Shop(800, 750, gs);
             Controls.Add(Player.shopRT);
-            covid = new Shop(900, 300, shb);
+            covid = new Shop(300, 300, shb);
             Controls.Add(covid.shopRT);
-            corona = new Shop(900, 300, shb);
+            corona = new Shop(1100, 300, shb);
             Controls.Add(corona.shopRT);
-
 
             tickerTimer.Enabled = true;
             tickerTimer.Interval = 5; //every 5ms
             //create timer event
             tickerTimer.Tick += TickerTimer_Tick;
-
+            //grocery spawner
             for (int i = 0; i < yum.Length; i++)
             {
                 int xCoordinate = rand.Next(this.Width - 50);
@@ -78,14 +78,6 @@ namespace _2mGame
                 yum[i] = new Shop(xCoordinate, yCoordinate, food);
                 Controls.Add(yum[i].shopRT);
             }
-            if (count == 10)
-            {
-                Form1 NewForm = new Form1();
-                NewForm.Show();
-                this.Dispose(false);
-                MessageBox.Show("You got Food for ISO");
-            }
-
 
         }
         private void TickerTimer_Tick(object sender, EventArgs e)
@@ -93,28 +85,44 @@ namespace _2mGame
             //code more making groceries arent behind shelves
             for (int i = 0; i < yum.Length; i++)
             {
-                if (shelf.shopRT.Bounds.IntersectsWith(yum[i].shopRT.Bounds))
+                if (yum[i].shopRT.Bounds.IntersectsWith(shelf.shopRT.Bounds))
                 {
-                    yum[i].shopRT.Left -= 2;
+                    yum[i].shopRT.Left -= 5;
                 }
             }
             //covid movement y axis
-            if (Player.shopRT.Top < 400)
+            if (Player.shopRT.Top < covid.shopRT.Top)
             {
                 covid.moveUpDown(up, airborne, shb);
             }
-            else if(Player.shopRT.Top > 400)
+            else if(Player.shopRT.Top > covid.shopRT.Top)
             {
                 covid.moveUpDown(down, airborne, shb);
             }
+            if (Player.shopRT.Left < covid.shopRT.Left)
+            {
+                covid.moveRightLeft(left, airborne, shb);
+            }
+            else if (Player.shopRT.Left > covid.shopRT.Left)
+            {
+                covid.moveRightLeft(right, airborne, shb);
+            }
             //corona movement x axis
-            if (Player.shopRT.Left < 750)
+            if (Player.shopRT.Left < corona.shopRT.Left)
             {
                 corona.moveRightLeft(left, airborne, shb);
             }
-            else if (Player.shopRT.Left > 750)
+            else if (Player.shopRT.Left > corona.shopRT.Left)
             {
                 corona.moveRightLeft(right, airborne, shb);
+            }
+            if (Player.shopRT.Top < corona.shopRT.Top)
+            {
+                corona.moveUpDown(up, airborne, shb);
+            }
+            else if (Player.shopRT.Top > corona.shopRT.Top)
+            {
+                corona.moveUpDown(down, airborne, shb);
             }
 
             //code for when player hits shopper and gets corona/loses game
@@ -141,19 +149,19 @@ namespace _2mGame
             //code to make player stay on screen
             if (Player.shopRT.Top > 800 )
             {
-                Player.shopRT.Top -= 2;
+                Player.shopRT.Top -= 10;
             }
             if (Player.shopRT.Top < -1)
             {
-                Player.shopRT.Top += 2;
+                Player.shopRT.Top += 10;
             }
             if (Player.shopRT.Left < 0)
             {
-                Player.shopRT.Left += 2;
+                Player.shopRT.Left += 10;
             }
             if (Player.shopRT.Left > 1535)
             {
-                Player.shopRT.Left -= 2;
+                Player.shopRT.Left -= 10;
             }
             //code to make covid stay on screen
             if (covid.shopRT.Top > 720)
