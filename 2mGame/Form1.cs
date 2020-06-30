@@ -33,14 +33,13 @@ namespace _2mGame
         //code to find and use image and give properties from class Shop
         Shop shelf;
         Shop Player;
-        Shop covid;
-        Shop corona;
         const int NUMBER_OF_FOOD = 10;
+        const dint NUMBER_OF_ENEMIES = 2;
         Shop[] yum = new Shop[NUMBER_OF_FOOD];
-        
+        Shop[] covid = new Shop[NUMBER_OF_ENEMIES];
 
         Bitmap sh = _2mGame.Properties.Resources.shelf;
-        Bitmap shb = _2mGame.Properties.Resources.redCircle;
+        Bitmap corona = _2mGame.Properties.Resources.redCircle;
         Bitmap gs = _2mGame.Properties.Resources.Player;
         Bitmap food = _2mGame.Properties.Resources.blueCircle;
         
@@ -61,10 +60,7 @@ namespace _2mGame
             //player and covid spawner
             Player = new Shop(800, 750, gs);
             Controls.Add(Player.shopRT);
-            covid = new Shop(300, 300, shb);
-            Controls.Add(covid.shopRT);
-            corona = new Shop(1100, 300, shb);
-            Controls.Add(corona.shopRT);
+
 
             tickerTimer.Enabled = true;
             tickerTimer.Interval = 5; //every 5ms
@@ -78,6 +74,13 @@ namespace _2mGame
                 yum[i] = new Shop(xCoordinate, yCoordinate, food);
                 Controls.Add(yum[i].shopRT);
             }
+            for (int i = 0; i < covid.Length; i++)
+            {
+                int xCoordinate = rand.Next(this.Width - 50);
+                int yCoordinate = rand.Next(this.Height - 50);
+                covid[i] = new Shop(xCoordinate, yCoordinate, corona);
+                Controls.Add(covid[i].shopRT);
+            }
 
         }
         private void TickerTimer_Tick(object sender, EventArgs e)
@@ -90,61 +93,57 @@ namespace _2mGame
                     yum[i].shopRT.Left -= 5;
                 }
             }
-            //covid movement y axis
-            if (Player.shopRT.Top < covid.shopRT.Top)
+            //covid movement
+            for (int i = 0; i < covid.Length; i++)
             {
-                covid.moveUpDown(up, airborne, shb);
+                if (Player.shopRT.Top < covid[i].shopRT.Top)
+                {
+                    covid[i].moveUpDown(up, airborne, corona);
+                }
+                else if (Player.shopRT.Top > covid[i].shopRT.Top)
+                {
+                    covid[i].moveUpDown(down, airborne, corona);
+                }
+                if (Player.shopRT.Left < covid[i].shopRT.Left)
+                {
+                    covid[i].moveRightLeft(left, airborne, corona);
+                }
+                else if (Player.shopRT.Left > covid[i].shopRT.Left)
+                {
+                    covid[i].moveRightLeft(right, airborne, corona);
+                }
+                if (covid[i].shopRT.Top > 720)
+                {
+                    covid[i].shopRT.Top -= 10;
+                    covid[i].moveRightLeft(left, airborne, gs);
+                }
+                if (covid[i].shopRT.Top < 20)
+                {
+                    covid[i].shopRT.Top += 10;
+                    covid[i].moveRightLeft(right, airborne, gs);
+                }
+                if (covid[i].shopRT.Left < 0)
+                {
+                    covid[i].shopRT.Left += 10;
+                    covid[i].moveUpDown(up, airborne, gs);
+                }
+                if (covid[i].shopRT.Left > 1535)
+                {
+                    covid[i].shopRT.Left -= 10;
+                    covid[i].moveUpDown(down, airborne, gs);
+                }
+                //code for when player hits shopper and gets corona/loses game
+                if (Player.shopRT.Bounds.IntersectsWith(covid[i].shopRT.Bounds))
+                {
+                    tickerTimer.Enabled = false;
+                    string message = "Oh darn you got covid19 and died";
+                    MessageBox.Show(message);
+                    Form1 NewForm = new Form1();
+                    NewForm.Show();
+                    this.Dispose(false);
+                }
             }
-            else if(Player.shopRT.Top > covid.shopRT.Top)
-            {
-                covid.moveUpDown(down, airborne, shb);
-            }
-            if (Player.shopRT.Left < covid.shopRT.Left)
-            {
-                covid.moveRightLeft(left, airborne, shb);
-            }
-            else if (Player.shopRT.Left > covid.shopRT.Left)
-            {
-                covid.moveRightLeft(right, airborne, shb);
-            }
-            //corona movement x axis
-            if (Player.shopRT.Left < corona.shopRT.Left)
-            {
-                corona.moveRightLeft(left, airborne, shb);
-            }
-            else if (Player.shopRT.Left > corona.shopRT.Left)
-            {
-                corona.moveRightLeft(right, airborne, shb);
-            }
-            if (Player.shopRT.Top < corona.shopRT.Top)
-            {
-                corona.moveUpDown(up, airborne, shb);
-            }
-            else if (Player.shopRT.Top > corona.shopRT.Top)
-            {
-                corona.moveUpDown(down, airborne, shb);
-            }
-
-            //code for when player hits shopper and gets corona/loses game
-            if (Player.shopRT.Bounds.IntersectsWith(covid.shopRT.Bounds))
-            {
-                tickerTimer.Enabled = false;
-                string message = "Oh darn you got covid19 and died";
-                MessageBox.Show(message);
-                Form1 NewForm = new Form1();
-                NewForm.Show();
-                this.Dispose(false);       
-            }
-
-            if (Player.shopRT.Bounds.IntersectsWith(corona.shopRT.Bounds))
-            {
-                tickerTimer.Enabled = false;
-                string message = "Oh darn you got covid19 and died";
-                MessageBox.Show(message);
-                Form1 NewForm = new Form1();
-                NewForm.Show();
-                this.Dispose(false);
-            }
+            
 
             //code to make player stay on screen
             if (Player.shopRT.Top > 800 )
@@ -163,48 +162,8 @@ namespace _2mGame
             {
                 Player.shopRT.Left -= 10;
             }
-            //code to make covid stay on screen
-            if (covid.shopRT.Top > 720)
-            {
-                covid.shopRT.Top -= 10;
-                covid.moveRightLeft(left, airborne, gs);
-            }
-            if (covid.shopRT.Top < 20)
-            {
-                covid.shopRT.Top += 10;
-                covid.moveRightLeft(right, airborne, gs);
-            }
-            if (covid.shopRT.Left < 0)
-            {
-                covid.shopRT.Left += 10;
-                covid.moveUpDown(up, airborne, gs);
-            }
-            if (covid.shopRT.Left > 1535)
-            {
-                covid.shopRT.Left -= 10;
-                covid.moveUpDown(down, airborne, gs);
-            }
-
-            if (corona.shopRT.Top > 650)
-            {
-                corona.shopRT.Top -= 10;
-                corona.moveRightLeft(right, airborne, gs);
-            }
-            if (corona.shopRT.Top < 20)
-            {
-                corona.shopRT.Top += 10;
-                corona.moveRightLeft(left, airborne, gs);
-            }
-            if (corona.shopRT.Left < 0)
-            {
-                corona.shopRT.Left += 10;
-                corona.moveUpDown(up, airborne, gs);
-            }
-            if (corona.shopRT.Left > 1535)
-            {
-                corona.shopRT.Left -= 10;
-                corona.moveUpDown(down, airborne, gs);
-            }
+            
+    
             //code for collecting groceries
             for (int i = 0; i < yum.Length; i++)
             {
