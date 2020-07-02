@@ -180,17 +180,17 @@ namespace _2mGame
             }
             if (e.KeyCode == Keys.S)
             {
-                Player.shopRT.Image = _2mGame.Properties.Resources.Player;
+                Player.shopRT.Image = _2mGame.Properties.Resources.Player180;
                 Player.moveUpDown(down, playerDist, gs);
             }
             if (e.KeyCode == Keys.A)
             {
-                Bitmap gs = _2mGame.Properties.Resources.Player270;
+                Player.shopRT.Image = _2mGame.Properties.Resources.Player270;
                 Player.moveRightLeft(left, playerDist, gs);
             }
             if (e.KeyCode == Keys.D)
             {
-                Bitmap gs = _2mGame.Properties.Resources.Player90;
+                Player.shopRT.Image = _2mGame.Properties.Resources.Player90;
                 Player.moveRightLeft(right, playerDist, gs);
             }
         }
