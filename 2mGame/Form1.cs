@@ -28,15 +28,16 @@ namespace _2mGame
         int down = 1;
         //Distance variable
         int playerDist = 10;
-        int airborne = 1;
-      
+        int airborne = 2;
+
         //code to find and use image and give properties from class Shop
-        Shop shelf;
-        Shop Player;
         const int NUMBER_OF_FOOD = 10;
-        const dint NUMBER_OF_ENEMIES = 2;
+        const int NUMBER_OF_ENEMIES = 2;
+        const int NUMBER_OF_SHELVES = 5;
         Shop[] yum = new Shop[NUMBER_OF_FOOD];
         Shop[] covid = new Shop[NUMBER_OF_ENEMIES];
+        Shop[] shelf = new Shop[NUMBER_OF_SHELVES];
+        Shop Player;
 
         Bitmap sh = _2mGame.Properties.Resources.shelf;
         Bitmap corona = _2mGame.Properties.Resources.redCircle;
@@ -46,21 +47,10 @@ namespace _2mGame
 
         public void Form1_Load(object sender, EventArgs e)
         {
-            //code to add images/shelves to form 
-            shelf = new Shop(150, 150, sh);
-            Controls.Add(shelf.shopRT);
-            shelf = new Shop(450, 150, sh);
-            Controls.Add(shelf.shopRT);
-            shelf = new Shop(750, 150, sh);
-            Controls.Add(shelf.shopRT);
-            shelf = new Shop(1050, 150, sh);
-            Controls.Add(shelf.shopRT);
-            shelf = new Shop(1350, 150, sh);
-            Controls.Add(shelf.shopRT);
+            
             //player and covid spawner
             Player = new Shop(800, 750, gs);
             Controls.Add(Player.shopRT);
-
 
             tickerTimer.Enabled = true;
             tickerTimer.Interval = 5; //every 5ms
@@ -74,27 +64,35 @@ namespace _2mGame
                 yum[i] = new Shop(xCoordinate, yCoordinate, food);
                 Controls.Add(yum[i].shopRT);
             }
+            //covid spawner
             for (int i = 0; i < covid.Length; i++)
             {
                 int xCoordinate = rand.Next(this.Width - 50);
-                int yCoordinate = rand.Next(this.Height - 50);
+                int yCoordinate = 300;
                 covid[i] = new Shop(xCoordinate, yCoordinate, corona);
                 Controls.Add(covid[i].shopRT);
             }
-
+            //shelves placer
+            for (int i = 0; i < shelf.Length; i++)
+            {         
+                int xCoordinate = 300 * i + 150;
+                shelf[i] = new Shop(xCoordinate, 150 , sh);
+                Controls.Add(shelf[i].shopRT);
+            }
         }
         private void TickerTimer_Tick(object sender, EventArgs e)
         {
             //code more making groceries arent behind shelves
-            for (int i = 0; i < yum.Length; i++)
+            for (int i = 0; i < shelf.Length; i++)
             {
-                if (yum[i].shopRT.Bounds.IntersectsWith(shelf.shopRT.Bounds))
+                if (yum[i].shopRT.Bounds.IntersectsWith(shelf[i].shopRT.Bounds))
                 {
-                    yum[i].shopRT.Left -= 5;
+                    yum[i].shopRT.Left += 10;
+                    
                 }
             }
-            //covid movement
-            for (int i = 0; i < covid.Length; i++)
+                //covid movement
+                for (int i = 0; i < covid.Length; i++)
             {
                 if (Player.shopRT.Top < covid[i].shopRT.Top)
                 {
@@ -112,26 +110,7 @@ namespace _2mGame
                 {
                     covid[i].moveRightLeft(right, airborne, corona);
                 }
-                if (covid[i].shopRT.Top > 720)
-                {
-                    covid[i].shopRT.Top -= 10;
-                    covid[i].moveRightLeft(left, airborne, gs);
-                }
-                if (covid[i].shopRT.Top < 20)
-                {
-                    covid[i].shopRT.Top += 10;
-                    covid[i].moveRightLeft(right, airborne, gs);
-                }
-                if (covid[i].shopRT.Left < 0)
-                {
-                    covid[i].shopRT.Left += 10;
-                    covid[i].moveUpDown(up, airborne, gs);
-                }
-                if (covid[i].shopRT.Left > 1535)
-                {
-                    covid[i].shopRT.Left -= 10;
-                    covid[i].moveUpDown(down, airborne, gs);
-                }
+                
                 //code for when player hits shopper and gets corona/loses game
                 if (Player.shopRT.Bounds.IntersectsWith(covid[i].shopRT.Bounds))
                 {
@@ -143,8 +122,6 @@ namespace _2mGame
                     this.Dispose(false);
                 }
             }
-            
-
             //code to make player stay on screen
             if (Player.shopRT.Top > 800 )
             {
@@ -162,13 +139,16 @@ namespace _2mGame
             {
                 Player.shopRT.Left -= 10;
             }
+
+
+
             
-    
             //code for collecting groceries
             for (int i = 0; i < yum.Length; i++)
             {
                 if (Player.shopRT.Bounds.IntersectsWith(yum[i].shopRT.Bounds))
                 {
+                    
                     count++;
                     yum[i].shopRT.Top = 2000; 
                     yum[i].shopRT.Left = 2000;
@@ -194,28 +174,24 @@ namespace _2mGame
             //Shopper control keys. W:Up; S:Down; A:Left; D:Right
             if (e.KeyCode == Keys.W)
             {
-                Player.moveUpDown(up, playerDist, gs);
+                Player.shopRT.Image = _2mGame.Properties.Resources.Player;
                 
+                Player.moveUpDown(up, playerDist, gs);
             }
             if (e.KeyCode == Keys.S)
             {
+                Player.shopRT.Image = _2mGame.Properties.Resources.Player;
                 Player.moveUpDown(down, playerDist, gs);
-               
-                
-
             }
             if (e.KeyCode == Keys.A)
             {
+                Bitmap gs = _2mGame.Properties.Resources.Player270;
                 Player.moveRightLeft(left, playerDist, gs);
-               
-                
-
             }
             if (e.KeyCode == Keys.D)
             {
+                Bitmap gs = _2mGame.Properties.Resources.Player90;
                 Player.moveRightLeft(right, playerDist, gs);
-                
-                
             }
         }
     }
