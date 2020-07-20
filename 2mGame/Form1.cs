@@ -20,7 +20,7 @@ namespace _2mGame
         int count = 0;
         Random rand = new Random();
         Timer tickerTimer = new Timer();
-
+        Timer movementTimer = new Timer();
         //Variables to determine direction
         int right = 1;
         int left = -1;
@@ -53,9 +53,13 @@ namespace _2mGame
             Controls.Add(Player.shopRT);
 
             tickerTimer.Enabled = true;
-            tickerTimer.Interval = 5; //every 5ms
+            tickerTimer.Interval = 5;//every 5ms
+            movementTimer.Enabled = true;
+            movementTimer.Interval = 100;
             //create timer event
             tickerTimer.Tick += TickerTimer_Tick;
+            movementTimer.Tick += movementTimer_Tick;
+            //every 5ms
             //grocery spawner
             for (int i = 0; i < yum.Length; i++)
             {
@@ -80,19 +84,10 @@ namespace _2mGame
                 Controls.Add(shelf[i].shopRT);
             }
         }
-        private void TickerTimer_Tick(object sender, EventArgs e)
+        private void movementTimer_Tick(object sender, EventArgs e)
         {
-            //code more making groceries arent behind shelves
-            for (int i = 0; i < shelf.Length; i++)
-            {
-                if (yum[i].shopRT.Bounds.IntersectsWith(shelf[i].shopRT.Bounds))
-                {
-                    yum[i].shopRT.Left += 10;
-                    
-                }
-            }
-                //covid movement
-                for (int i = 0; i < covid.Length; i++)
+            //covid movement
+            for (int i = 0; i < covid.Length; i++)
             {
                 if (Player.shopRT.Top < covid[i].shopRT.Top)
                 {
@@ -110,7 +105,7 @@ namespace _2mGame
                 {
                     covid[i].moveRightLeft(right, airborne, corona);
                 }
-                
+
                 //code for when player hits shopper and gets corona/loses game
                 if (Player.shopRT.Bounds.IntersectsWith(covid[i].shopRT.Bounds))
                 {
@@ -122,6 +117,11 @@ namespace _2mGame
                     this.Dispose(false);
                 }
             }
+        }
+
+            private void TickerTimer_Tick(object sender, EventArgs e)
+            {
+            
             //code to make player stay on screen
             if (Player.shopRT.Top > 800 )
             {
@@ -140,9 +140,6 @@ namespace _2mGame
                 Player.shopRT.Left -= 10;
             }
 
-
-
-            
             //code for collecting groceries
             for (int i = 0; i < yum.Length; i++)
             {
@@ -154,7 +151,8 @@ namespace _2mGame
                     yum[i].shopRT.Left = 2000;
                     yum[i].shopRT.Dispose();
                     lblScore.Text = "Grocery Items Collected: " + count;
-                }          
+                }
+               
             }
             if (count == 10)
             {
@@ -169,13 +167,13 @@ namespace _2mGame
             }
         }
 
+
         private void Form1_KeyDown(object sender, KeyEventArgs e)
         {
             //Shopper control keys. W:Up; S:Down; A:Left; D:Right
             if (e.KeyCode == Keys.W)
             {
                 Player.shopRT.Image = _2mGame.Properties.Resources.Player;
-                
                 Player.moveUpDown(up, playerDist, gs);
             }
             if (e.KeyCode == Keys.S)
@@ -192,6 +190,20 @@ namespace _2mGame
             {
                 Player.shopRT.Image = _2mGame.Properties.Resources.Player90;
                 Player.moveRightLeft(right, playerDist, gs);
+            }
+            //pause button
+            if (e.KeyCode == Keys.P)
+            {
+               if (tickerTimer.Enabled == false)
+                {
+                    tickerTimer.Enabled = true;
+
+                }
+               else if (tickerTimer.Enabled == true)
+                {
+                    tickerTimer.Enabled = false;
+
+                }
             }
         }
     }
