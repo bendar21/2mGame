@@ -105,5 +105,11 @@
   <ItemGroup>
     <None Include="Resources\Player270.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\coronaVirus.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\HS.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

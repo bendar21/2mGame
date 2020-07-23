@@ -28,10 +28,10 @@ namespace _2mGame
         int down = 1;
         //Distance variable
         int playerDist = 10;
-        int airborne = 2;
+        
 
         //code to find and use image and give properties from class Shop
-        const int NUMBER_OF_FOOD = 10;
+        const int NUMBER_OF_FOOD = 15;
         const int NUMBER_OF_ENEMIES = 2;
         const int NUMBER_OF_SHELVES = 5;
         Shop[] yum = new Shop[NUMBER_OF_FOOD];
@@ -40,9 +40,9 @@ namespace _2mGame
         Shop Player;
 
         Bitmap sh = _2mGame.Properties.Resources.shelf;
-        Bitmap corona = _2mGame.Properties.Resources.redCircle;
+        Bitmap corona = _2mGame.Properties.Resources.coronaVirus;
         Bitmap gs = _2mGame.Properties.Resources.Player;
-        Bitmap food = _2mGame.Properties.Resources.blueCircle;
+        Bitmap food = _2mGame.Properties.Resources.HS;
         
 
         public void Form1_Load(object sender, EventArgs e)
@@ -52,10 +52,10 @@ namespace _2mGame
             Player = new Shop(800, 750, gs);
             Controls.Add(Player.shopRT);
 
-            tickerTimer.Enabled = true;
+            tickerTimer.Enabled = false;
             tickerTimer.Interval = 5;//every 5ms
-            movementTimer.Enabled = true;
-            movementTimer.Interval = 100;
+            movementTimer.Enabled = false;
+            movementTimer.Interval = 50;
             //create timer event
             tickerTimer.Tick += TickerTimer_Tick;
             movementTimer.Tick += movementTimer_Tick;
@@ -75,12 +75,14 @@ namespace _2mGame
                 int yCoordinate = 300;
                 covid[i] = new Shop(xCoordinate, yCoordinate, corona);
                 Controls.Add(covid[i].shopRT);
+                
             }
             //shelves placer
             for (int i = 0; i < shelf.Length; i++)
             {         
                 int xCoordinate = 300 * i + 150;
-                shelf[i] = new Shop(xCoordinate, 150 , sh);
+                int yCoordinate = 150;
+                shelf[i] = new Shop(xCoordinate, yCoordinate, sh);
                 Controls.Add(shelf[i].shopRT);
             }
         }
@@ -89,6 +91,7 @@ namespace _2mGame
             //covid movement
             for (int i = 0; i < covid.Length; i++)
             {
+                int airborne = 3 * i + 5;
                 if (Player.shopRT.Top < covid[i].shopRT.Top)
                 {
                     covid[i].moveUpDown(up, airborne, corona);
@@ -109,6 +112,7 @@ namespace _2mGame
                 //code for when player hits shopper and gets corona/loses game
                 if (Player.shopRT.Bounds.IntersectsWith(covid[i].shopRT.Bounds))
                 {
+                    movementTimer.Enabled = false;
                     tickerTimer.Enabled = false;
                     string message = "Oh darn you got covid19 and died";
                     MessageBox.Show(message);
@@ -152,22 +156,58 @@ namespace _2mGame
                     yum[i].shopRT.Dispose();
                     lblScore.Text = "Grocery Items Collected: " + count;
                 }
-               
             }
-            if (count == 10)
+            //win 
+            if (count == 15)
             {
+                movementTimer.Enabled = false;
                 tickerTimer.Enabled = false;
                 Player.shopRT.Top = 750;
                 Player.shopRT.Left = 750;
-                string Winmessage = "yah u got food for ISO";
+                string Winmessage = "yay u got all the handsanitiser " + "\r\n" + "to survive the pandemic of 2020 ";
                 MessageBox.Show(Winmessage);
                 Form1 NewForm = new Form1();
                 NewForm.Show();
                 this.Dispose(false);
             }
+            if (count == 10)
+            {
+                
+            }
+            //code to make player stay out of shelves
+            for (int i = 0; i < shelf.Length; i++)
+            {
+               
+                if (Player.shopRT.Image == _2mGame.Properties.Resources.Player)
+                {
+                    if (Player.shopRT.Bounds.IntersectsWith(shelf[i].shopRT.Bounds))
+                    {
+                        Player.shopRT.Top += 10;
+                    }
+                }
+                if (Player.shopRT.Image == Properties.Resources.Player180)
+                {
+                    if (Player.shopRT.Bounds.IntersectsWith(shelf[i].shopRT.Bounds))
+                    {
+                        Player.shopRT.Top -= 10;
+                    }
+                }
+                if (Player.shopRT.Image == Properties.Resources.Player270)
+                {
+                    if (Player.shopRT.Bounds.IntersectsWith(shelf[i].shopRT.Bounds))
+                    {
+                        Player.shopRT.Left += 10;
+                    }
+                }
+                if (Player.shopRT.Image == Properties.Resources.Player90)
+                {
+                    if (Player.shopRT.Bounds.IntersectsWith(shelf[i].shopRT.Bounds))
+                    {
+                        Player.shopRT.Left -= 10;
+                    }
+                }
+            }
         }
-
-
         private void Form1_KeyDown(object sender, KeyEventArgs e)
         {
             //Shopper control keys. W:Up; S:Down; A:Left; D:Right
@@ -175,21 +215,30 @@ namespace _2mGame
             {
                 Player.shopRT.Image = _2mGame.Properties.Resources.Player;
                 Player.moveUpDown(up, playerDist, gs);
+                tickerTimer.Enabled = true;
+                movementTimer.Enabled = true;
+
             }
             if (e.KeyCode == Keys.S)
             {
                 Player.shopRT.Image = _2mGame.Properties.Resources.Player180;
                 Player.moveUpDown(down, playerDist, gs);
+                tickerTimer.Enabled = true;
+                movementTimer.Enabled = true;
             }
             if (e.KeyCode == Keys.A)
             {
                 Player.shopRT.Image = _2mGame.Properties.Resources.Player270;
                 Player.moveRightLeft(left, playerDist, gs);
+                tickerTimer.Enabled = true;
+                movementTimer.Enabled = true;
             }
             if (e.KeyCode == Keys.D)
             {
                 Player.shopRT.Image = _2mGame.Properties.Resources.Player90;
                 Player.moveRightLeft(right, playerDist, gs);
+                tickerTimer.Enabled = true;
+                movementTimer.Enabled = true;
             }
             //pause button
             if (e.KeyCode == Keys.P)
@@ -197,12 +246,12 @@ namespace _2mGame
                if (tickerTimer.Enabled == false)
                 {
                     tickerTimer.Enabled = true;
-
+                    movementTimer.Enabled = true;
                 }
                else if (tickerTimer.Enabled == true)
                 {
                     tickerTimer.Enabled = false;
-
+                    movementTimer.Enabled = false;
                 }
             }
         }
