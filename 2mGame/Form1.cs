@@ -21,6 +21,7 @@ namespace _2mGame
         Random rand = new Random();
         Timer tickerTimer = new Timer();
         Timer movementTimer = new Timer();
+        string direction = "up";
         //Variables to determine direction
         int right = 1;
         int left = -1;
@@ -47,7 +48,7 @@ namespace _2mGame
 
         public void Form1_Load(object sender, EventArgs e)
         {
-            
+            MessageBox.Show("P to pause, WASD to move" + "\r\n" +"collect all the hand sanitiser to win");
             //player and covid spawner
             Player = new Shop(800, 750, gs);
             Controls.Add(Player.shopRT);
@@ -91,7 +92,7 @@ namespace _2mGame
             //covid movement
             for (int i = 0; i < covid.Length; i++)
             {
-                int airborne = 3 * i + 5;
+                int airborne = 2 * i + 5;
                 if (Player.shopRT.Top < covid[i].shopRT.Top)
                 {
                     covid[i].moveUpDown(up, airborne, corona);
@@ -157,14 +158,14 @@ namespace _2mGame
                     lblScore.Text = "Grocery Items Collected: " + count;
                 }
             }
-            //win 
+            //win by collecting all the items
             if (count == 15)
             {
                 movementTimer.Enabled = false;
                 tickerTimer.Enabled = false;
                 Player.shopRT.Top = 750;
                 Player.shopRT.Left = 750;
-                string Winmessage = "yay u got all the handsanitiser " + "\r\n" + "to survive the pandemic of 2020 ";
+                string Winmessage = "yay u got all the handsanitiser " + "\r\n" + "to survive covid19 " + "\r\n" + "and avoid getting corona";
                 MessageBox.Show(Winmessage);
                 Form1 NewForm = new Form1();
                 NewForm.Show();
@@ -174,36 +175,35 @@ namespace _2mGame
             {
                 
             }
+
             //code to make player stay out of shelves
             for (int i = 0; i < shelf.Length; i++)
             {
-               
-                if (Player.shopRT.Image == _2mGame.Properties.Resources.Player)
+                if (Player.shopRT.Bounds.IntersectsWith(shelf[i].shopRT.Bounds))
                 {
-                    if (Player.shopRT.Bounds.IntersectsWith(shelf[i].shopRT.Bounds))
+                    if (direction == "up")
                     {
                         Player.shopRT.Top += 10;
                     }
-                }
-                if (Player.shopRT.Image == Properties.Resources.Player180)
-                {
-                    if (Player.shopRT.Bounds.IntersectsWith(shelf[i].shopRT.Bounds))
+                    if (direction == "down")
                     {
                         Player.shopRT.Top -= 10;
                     }
-                }
-                if (Player.shopRT.Image == Properties.Resources.Player270)
-                {
-                    if (Player.shopRT.Bounds.IntersectsWith(shelf[i].shopRT.Bounds))
+                    if (direction == "left")
                     {
                         Player.shopRT.Left += 10;
                     }
-                }
-                if (Player.shopRT.Image == Properties.Resources.Player90)
-                {
-                    if (Player.shopRT.Bounds.IntersectsWith(shelf[i].shopRT.Bounds))
+                    if (direction == "right")
                     {
                         Player.shopRT.Left -= 10;
+                    }
+                }
+                for (int x = 0; x < yum.Length; x++)
+                {
+                    if (yum[x].shopRT.Bounds.IntersectsWith(shelf[i].shopRT.Bounds))
+                    {
+                        yum[x].shopRT.Left += 10;
+                        lblScore.Text = "wrong";
                     }
                 }
             }
@@ -211,12 +211,15 @@ namespace _2mGame
         private void Form1_KeyDown(object sender, KeyEventArgs e)
         {
             //Shopper control keys. W:Up; S:Down; A:Left; D:Right
+            //changes player orientation by changing the image
+            
             if (e.KeyCode == Keys.W)
             {
                 Player.shopRT.Image = _2mGame.Properties.Resources.Player;
                 Player.moveUpDown(up, playerDist, gs);
                 tickerTimer.Enabled = true;
                 movementTimer.Enabled = true;
+                direction = "up";
 
             }
             if (e.KeyCode == Keys.S)
@@ -225,6 +228,7 @@ namespace _2mGame
                 Player.moveUpDown(down, playerDist, gs);
                 tickerTimer.Enabled = true;
                 movementTimer.Enabled = true;
+                direction = "down";
             }
             if (e.KeyCode == Keys.A)
             {
@@ -232,6 +236,7 @@ namespace _2mGame
                 Player.moveRightLeft(left, playerDist, gs);
                 tickerTimer.Enabled = true;
                 movementTimer.Enabled = true;
+                direction = "left";
             }
             if (e.KeyCode == Keys.D)
             {
@@ -239,6 +244,7 @@ namespace _2mGame
                 Player.moveRightLeft(right, playerDist, gs);
                 tickerTimer.Enabled = true;
                 movementTimer.Enabled = true;
+                direction = "right";
             }
             //pause button
             if (e.KeyCode == Keys.P)
