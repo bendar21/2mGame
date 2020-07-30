@@ -11,9 +11,9 @@ using System.IO;
 
 namespace _2mGame
 {
-    public partial class Form1 : Form
+    public partial class Form2 : Form
     {
-        public Form1()
+        public Form2()
         {
             InitializeComponent();
         }
@@ -29,8 +29,6 @@ namespace _2mGame
         int down = 1;
         //Distance variable
         int playerDist = 10;
-        
-
         //code to find and use image and give properties from class Shop
         const int NUMBER_OF_FOOD = 15;
         const int NUMBER_OF_ENEMIES = 2;
@@ -44,12 +42,11 @@ namespace _2mGame
         Bitmap corona = _2mGame.Properties.Resources.coronaVirus;
         Bitmap gs = _2mGame.Properties.Resources.Player;
         Bitmap food = _2mGame.Properties.Resources.HS;
-        
 
-        public void Form1_Load(object sender, EventArgs e)
+        private void Form2_Load(object sender, EventArgs e)
         {
             //instruction messagebox
-            MessageBox.Show("P to pause, WASD to move" + "\r\n" +"collect all the hand sanitiser to win");
+            MessageBox.Show("P to pause, WASD to move" + "\r\n" + "collect all the hand sanitiser to win");
             //player spawner
             Player = new Shop(800, 750, gs);
             Controls.Add(Player.shopRT);
@@ -61,7 +58,7 @@ namespace _2mGame
             //create timer events
             tickerTimer.Tick += TickerTimer_Tick;
             movementTimer.Tick += movementTimer_Tick;
-            
+
             //grocery spawner
             for (int i = 0; i < yum.Length; i++)
             {
@@ -77,11 +74,11 @@ namespace _2mGame
                 int yCoordinate = 300;
                 covid[i] = new Shop(xCoordinate, yCoordinate, corona);
                 Controls.Add(covid[i].shopRT);
-                
+
             }
             //shelves placer
             for (int i = 0; i < shelf.Length; i++)
-            {         
+            {
                 int xCoordinate = 300 * i + 150;
                 int yCoordinate = 150;
                 shelf[i] = new Shop(xCoordinate, yCoordinate, sh);
@@ -106,7 +103,6 @@ namespace _2mGame
                     }
                 }
             }
-
         }
         private void movementTimer_Tick(object sender, EventArgs e)
         {
@@ -144,12 +140,11 @@ namespace _2mGame
                 }
             }
         }
+        private void TickerTimer_Tick(object sender, EventArgs e)
+        {
 
-            private void TickerTimer_Tick(object sender, EventArgs e)
-            {
-            
             //code to make player stay on screen
-            if (Player.shopRT.Top > 800 )
+            if (Player.shopRT.Top > 800)
             {
                 Player.shopRT.Top -= 10;
             }
@@ -171,9 +166,9 @@ namespace _2mGame
             {
                 if (Player.shopRT.Bounds.IntersectsWith(yum[i].shopRT.Bounds))
                 {
-                    
+
                     count++;
-                    yum[i].shopRT.Top = 2000; 
+                    yum[i].shopRT.Top = 2000;
                     yum[i].shopRT.Left = 2000;
                     yum[i].shopRT.Dispose();
                     lblScore.Text = "Grocery Items Collected: " + count;
@@ -186,7 +181,7 @@ namespace _2mGame
                 tickerTimer.Enabled = false;
                 Player.shopRT.Top = 750;
                 Player.shopRT.Left = 750;
-                string Winmessage = "oh no we ran out of handsanitiser" +"\r\n"+"back to the supermarket";
+                string Winmessage = "yay u got all the handsanitiser " + "\r\n" + "to survive covid19 " + "\r\n" + "and avoid getting corona";
                 MessageBox.Show(Winmessage);
                 Form2 NewForm = new Form2();
                 NewForm.Show();
@@ -194,7 +189,7 @@ namespace _2mGame
             }
             if (count == 10)
             {
-                
+
             }
 
             //code to make player stay out of shelves
@@ -224,16 +219,16 @@ namespace _2mGame
                     if (yum[x].shopRT.Bounds.IntersectsWith(shelf[i].shopRT.Bounds))
                     {
                         yum[x].shopRT.Left += 10;
-                        
+
                     }
                 }
             }
         }
-        private void Form1_KeyDown(object sender, KeyEventArgs e)
+        private void Form2_KeyDown(object sender, KeyEventArgs e)
         {
             //Shopper control keys. W:Up; S:Down; A:Left; D:Right
             //changes player orientation by changing the image
-            
+
             if (e.KeyCode == Keys.W)
             {
                 Player.shopRT.Image = _2mGame.Properties.Resources.Player;
@@ -270,12 +265,12 @@ namespace _2mGame
             //pause button
             if (e.KeyCode == Keys.P)
             {
-               if (tickerTimer.Enabled == false)
+                if (tickerTimer.Enabled == false)
                 {
                     tickerTimer.Enabled = true;
                     movementTimer.Enabled = true;
                 }
-               else if (tickerTimer.Enabled == true)
+                else if (tickerTimer.Enabled == true)
                 {
                     tickerTimer.Enabled = false;
                     movementTimer.Enabled = false;
