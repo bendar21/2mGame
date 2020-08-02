@@ -39,20 +39,25 @@ namespace _2mGame
         Shop[] covid = new Shop[NUMBER_OF_ENEMIES];
         Shop[] shelf = new Shop[NUMBER_OF_SHELVES];
         Shop Player;
+        Shop Worker;
 
         Bitmap sh = _2mGame.Properties.Resources.shelf;
         Bitmap corona = _2mGame.Properties.Resources.coronaVirus;
         Bitmap gs = _2mGame.Properties.Resources.Player;
         Bitmap food = _2mGame.Properties.Resources.HS;
-        
+        Bitmap exit = _2mGame.Properties.Resources.worker;
+
 
         public void Form1_Load(object sender, EventArgs e)
         {
             //instruction messagebox
-            MessageBox.Show("P to pause, WASD to move" + "\r\n" +"collect all the hand sanitiser to win");
+            MessageBox.Show("P to pause, WASD to move" + "\r\n" +"collect all the hand sanitiser " + "\r\n" + "and take it to the register to win");
             //player spawner
             Player = new Shop(800, 750, gs);
             Controls.Add(Player.shopRT);
+            //worker spawner
+            Worker = new Shop(1420, 740, exit);
+            Controls.Add(Worker.shopRT);
             //timer enabled and ticks 
             tickerTimer.Enabled = false;
             tickerTimer.Interval = 5;//every 5ms
@@ -180,21 +185,18 @@ namespace _2mGame
                 }
             }
             //win by collecting all the items
-            if (count == 15)
+            if (Player.shopRT.Bounds.IntersectsWith(Worker.shopRT.Bounds))
             {
-                movementTimer.Enabled = false;
-                tickerTimer.Enabled = false;
-                Player.shopRT.Top = 750;
-                Player.shopRT.Left = 750;
-                string Winmessage = "oh no we ran out of handsanitiser" +"\r\n"+"back to the supermarket";
-                MessageBox.Show(Winmessage);
-                Form2 NewForm = new Form2();
-                NewForm.Show();
-                this.Dispose(false);
-            }
-            if (count == 10)
-            {
-                
+                if (count == 15)
+                {
+                    movementTimer.Enabled = false;
+                    tickerTimer.Enabled = false;
+                    string Winmessage = "yah we got hand sanitiser";
+                    MessageBox.Show(Winmessage);
+                    Form2 NewForm = new Form2();
+                    NewForm.Show();
+                    this.Dispose(false);
+                }
             }
 
             //code to make player stay out of shelves

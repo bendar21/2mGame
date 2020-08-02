@@ -30,26 +30,31 @@ namespace _2mGame
         //Distance variable
         int playerDist = 10;
         //code to find and use image and give properties from class Shop
-        const int NUMBER_OF_FOOD = 15;
-        const int NUMBER_OF_ENEMIES = 2;
+        const int NUMBER_OF_FOOD = 30;
+        const int NUMBER_OF_ENEMIES = 8;
         const int NUMBER_OF_SHELVES = 5;
         Shop[] yum = new Shop[NUMBER_OF_FOOD];
         Shop[] covid = new Shop[NUMBER_OF_ENEMIES];
         Shop[] shelf = new Shop[NUMBER_OF_SHELVES];
         Shop Player;
+        Shop Worker;
 
         Bitmap sh = _2mGame.Properties.Resources.shelf;
         Bitmap corona = _2mGame.Properties.Resources.coronaVirus;
         Bitmap gs = _2mGame.Properties.Resources.Player;
         Bitmap food = _2mGame.Properties.Resources.HS;
+        Bitmap exit = _2mGame.Properties.Resources.worker;
 
         private void Form2_Load(object sender, EventArgs e)
         {
             //instruction messagebox
-            MessageBox.Show("P to pause, WASD to move" + "\r\n" + "collect all the hand sanitiser to win");
+            MessageBox.Show("OhNo we ran outta handsanitiser halfway through quarantine" + "\r\n" + "we'll need twice as much now that covid19 cases have quadrupled");
             //player spawner
             Player = new Shop(800, 750, gs);
             Controls.Add(Player.shopRT);
+            //worker spawn
+            Worker = new Shop(1420, 740, exit);
+            Controls.Add(Worker.shopRT);
             //timer enabled and ticks 
             tickerTimer.Enabled = false;
             tickerTimer.Interval = 5;//every 5ms
@@ -109,7 +114,7 @@ namespace _2mGame
             //covid movement speed and direction
             for (int i = 0; i < covid.Length; i++)
             {
-                int airborne = 2 * i + 5;
+                int airborne = i + 1;
                 if (Player.shopRT.Top < covid[i].shopRT.Top)
                 {
                     covid[i].moveUpDown(up, airborne, corona);
@@ -174,22 +179,19 @@ namespace _2mGame
                     lblScore.Text = "Grocery Items Collected: " + count;
                 }
             }
-            //win by collecting all the items
-            if (count == 15)
+            //win by collecting all the items and take them to counter
+            if (Player.shopRT.Bounds.IntersectsWith(Worker.shopRT.Bounds))
             {
-                movementTimer.Enabled = false;
-                tickerTimer.Enabled = false;
-                Player.shopRT.Top = 750;
-                Player.shopRT.Left = 750;
-                string Winmessage = "yay u got all the handsanitiser " + "\r\n" + "to survive covid19 " + "\r\n" + "and avoid getting corona";
-                MessageBox.Show(Winmessage);
-                Form2 NewForm = new Form2();
-                NewForm.Show();
-                this.Dispose(false);
-            }
-            if (count == 10)
-            {
-
+                if (count == 15)
+                {
+                    movementTimer.Enabled = false;
+                    tickerTimer.Enabled = false;
+                    string Winmessage = "yah we got hand sanitiser";
+                    MessageBox.Show(Winmessage);
+                    Form2 NewForm = new Form2();
+                    NewForm.Show();
+                    this.Dispose(false);
+                }
             }
 
             //code to make player stay out of shelves
@@ -214,6 +216,7 @@ namespace _2mGame
                         Player.shopRT.Left -= 10;
                     }
                 }
+                //code to stop hand sanitiser hiding in shelves
                 for (int x = 0; x < yum.Length; x++)
                 {
                     if (yum[x].shopRT.Bounds.IntersectsWith(shelf[i].shopRT.Bounds))
