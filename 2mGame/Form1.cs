@@ -18,6 +18,7 @@ namespace _2mGame
             InitializeComponent();
         }
         int count = 0;
+        Label lblScore = new Label();
         Random rand = new Random();
         Timer tickerTimer = new Timer();
         Timer movementTimer = new Timer();
@@ -52,6 +53,8 @@ namespace _2mGame
         {
             //instruction messagebox
             MessageBox.Show("P to pause, WASD to move" + "\r\n" +"collect all the hand sanitiser " + "\r\n" + "and take it to the register to win");
+            lblScore.Location = new Point(792, 24);
+            Controls.Add(lblScore);
             //player spawner
             Player = new Shop(800, 750, gs);
             Controls.Add(Player.shopRT);

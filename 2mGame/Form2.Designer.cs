@@ -28,18 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.lblScore = new System.Windows.Forms.Label();
             this.SuspendLayout();
-            // 
-            // lblScore
-            // 
-            this.lblScore.AutoSize = true;
-            this.lblScore.Location = new System.Drawing.Point(793, 24);
-            this.lblScore.Name = "lblScore";
-            this.lblScore.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.lblScore.Size = new System.Drawing.Size(35, 13);
-            this.lblScore.TabIndex = 0;
-            this.lblScore.Text = "Score";
             // 
             // Form2
             // 
@@ -47,18 +36,13 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(1604, 881);
-            this.Controls.Add(this.lblScore);
             this.Name = "Form2";
             this.Text = "Form2";
             this.Load += new System.EventHandler(this.Form2_Load);
-
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
         #endregion
-
-        private System.Windows.Forms.Label lblScore;
     }
 }

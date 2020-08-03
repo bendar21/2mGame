@@ -18,6 +18,7 @@ namespace _2mGame
             InitializeComponent();
         }
         int count = 0;
+        Label lblScore = new Label();
         Random rand = new Random();
         Timer tickerTimer = new Timer();
         Timer movementTimer = new Timer();
@@ -49,6 +50,11 @@ namespace _2mGame
         {
             //instruction messagebox
             MessageBox.Show("OhNo we ran outta handsanitiser halfway through quarantine" + "\r\n" + "we'll need twice as much now that covid19 cases have quadrupled");
+            lblScore.Location = new Point(792, 24);
+            lblScore.Height = 100;
+            lblScore.Width = 100;
+            lblScore.Text = "Score";
+            Controls.Add(lblScore);
             //player spawner
             Player = new Shop(800, 750, gs);
             Controls.Add(Player.shopRT);
