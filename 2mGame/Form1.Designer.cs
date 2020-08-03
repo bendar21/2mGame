@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             this.lblScore = new System.Windows.Forms.Label();
-            this.lblExit = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // lblScore
@@ -43,17 +42,6 @@
             this.lblScore.TabIndex = 0;
             this.lblScore.Text = "Score";
             // 
-            // lblExit
-            // 
-            this.lblExit.AutoSize = true;
-            this.lblExit.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblExit.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-            this.lblExit.Location = new System.Drawing.Point(1460, 738);
-            this.lblExit.Name = "lblExit";
-            this.lblExit.Size = new System.Drawing.Size(49, 20);
-            this.lblExit.TabIndex = 1;
-            this.lblExit.Text = "EXIT";
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -61,7 +49,6 @@
             this.AutoValidate = System.Windows.Forms.AutoValidate.EnablePreventFocusChange;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(1604, 881);
-            this.Controls.Add(this.lblExit);
             this.Controls.Add(this.lblScore);
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -77,7 +64,6 @@
         #endregion
 
         private System.Windows.Forms.Label lblScore;
-        private System.Windows.Forms.Label lblExit;
     }
 }
 

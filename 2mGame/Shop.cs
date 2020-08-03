@@ -14,6 +14,7 @@ namespace _2mGame
         PictureBox shop;
         Bitmap shopImage;
 
+
         //code to autosize every picturebox
         public Shop(int argsLeft, int argsTop, Bitmap argsImageFile)
         {

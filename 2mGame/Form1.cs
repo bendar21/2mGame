@@ -91,27 +91,7 @@ namespace _2mGame
                 int yCoordinate = 150;
                 shelf[i] = new Shop(xCoordinate, yCoordinate, sh);
                 Controls.Add(shelf[i].shopRT);
-                for (int x = 0; x < yum.Length; x++)
-                {
-                    if (yum[x].shopRT.Bounds.IntersectsWith(shelf[i].shopRT.Bounds))
-                    {
-                        yum[x].shopRT.Left += 10;
-
-                    }
-                }
             }
-            for (int i = 0; i < shelf.Length; i++)
-            {
-                for (int x = 0; x < yum.Length; x++)
-                {
-                    if (yum[x].shopRT.Bounds.IntersectsWith(shelf[i].shopRT.Bounds))
-                    {
-                        yum[x].shopRT.Left += 10;
-
-                    }
-                }
-            }
-
         }
         private void movementTimer_Tick(object sender, EventArgs e)
         {
@@ -187,6 +167,14 @@ namespace _2mGame
             //win by collecting all the items
             if (Player.shopRT.Bounds.IntersectsWith(Worker.shopRT.Bounds))
             {
+                if (direction == "down")
+                {
+                    Player.shopRT.Top -= 10;
+                }
+                if (direction == "right")
+                {
+                    Player.shopRT.Left -= 10;
+                }
                 if (count == 15)
                 {
                     movementTimer.Enabled = false;

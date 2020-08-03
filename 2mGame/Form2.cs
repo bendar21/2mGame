@@ -88,26 +88,9 @@ namespace _2mGame
                 int yCoordinate = 150;
                 shelf[i] = new Shop(xCoordinate, yCoordinate, sh);
                 Controls.Add(shelf[i].shopRT);
-                for (int x = 0; x < yum.Length; x++)
-                {
-                    if (yum[x].shopRT.Bounds.IntersectsWith(shelf[i].shopRT.Bounds))
-                    {
-                        yum[x].shopRT.Left += 10;
-
-                    }
-                }
+                
             }
-            for (int i = 0; i < shelf.Length; i++)
-            {
-                for (int x = 0; x < yum.Length; x++)
-                {
-                    if (yum[x].shopRT.Bounds.IntersectsWith(shelf[i].shopRT.Bounds))
-                    {
-                        yum[x].shopRT.Left += 10;
-
-                    }
-                }
-            }
+            
         }
         private void movementTimer_Tick(object sender, EventArgs e)
         {
@@ -139,7 +122,7 @@ namespace _2mGame
                     tickerTimer.Enabled = false;
                     string message = "Oh darn you got covid19 and died";
                     MessageBox.Show(message);
-                    Form1 NewForm = new Form1();
+                    Form2 NewForm = new Form2();
                     NewForm.Show();
                     this.Dispose(false);
                 }
@@ -147,7 +130,7 @@ namespace _2mGame
         }
         private void TickerTimer_Tick(object sender, EventArgs e)
         {
-
+            
             //code to make player stay on screen
             if (Player.shopRT.Top > 800)
             {
@@ -169,19 +152,46 @@ namespace _2mGame
             //code for collecting groceries
             for (int i = 0; i < yum.Length; i++)
             {
+                if (yum[i].shopRT.Top > 800)
+                {
+                    yum[i].shopRT.Top -= 10;
+                }
+                if (yum[i].shopRT.Top < -1)
+                {
+                    yum[i].shopRT.Top += 10;
+                }
+                if (yum[i].shopRT.Left < 0)
+                {
+                    yum[i].shopRT.Left += 10;
+                }
+                if (yum[i].shopRT.Left > 1535)
+                {
+                    yum[i].shopRT.Left -= 10;
+                }
                 if (Player.shopRT.Bounds.IntersectsWith(yum[i].shopRT.Bounds))
                 {
-
                     count++;
                     yum[i].shopRT.Top = 2000;
                     yum[i].shopRT.Left = 2000;
                     yum[i].shopRT.Dispose();
                     lblScore.Text = "Grocery Items Collected: " + count;
                 }
+                if (Worker.shopRT.Bounds.IntersectsWith(yum[i].shopRT.Bounds))
+                {           
+                    yum[i].shopRT.Top -= 10;
+                }
             }
             //win by collecting all the items and take them to counter
             if (Player.shopRT.Bounds.IntersectsWith(Worker.shopRT.Bounds))
             {
+                if (direction == "down")
+                {
+                    Player.shopRT.Top -= 10;
+                }
+                if (direction == "right")
+                {
+                    Player.shopRT.Left -= 10;
+                }
                 if (count == 15)
                 {
                     movementTimer.Enabled = false;
@@ -231,7 +241,8 @@ namespace _2mGame
         {
             //Shopper control keys. W:Up; S:Down; A:Left; D:Right
             //changes player orientation by changing the image
-
+            //enable timer to start game when character moves
+            
             if (e.KeyCode == Keys.W)
             {
                 Player.shopRT.Image = _2mGame.Properties.Resources.Player;
