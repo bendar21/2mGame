@@ -18,10 +18,10 @@ namespace _2mGame
             InitializeComponent();
         }
         int count = 0;
-        Label lblScore = new Label();
         Random rand = new Random();
         Timer tickerTimer = new Timer();
         Timer movementTimer = new Timer();
+        Label lblScore = new Label();
         string direction = "up";
         //Variables to determine direction
         int right = 1;
@@ -52,8 +52,12 @@ namespace _2mGame
         public void Form1_Load(object sender, EventArgs e)
         {
             //instruction messagebox
-            MessageBox.Show("P to pause, WASD to move" + "\r\n" +"collect all the hand sanitiser " + "\r\n" + "and take it to the register to win");
-            lblScore.Location = new Point(792, 24);
+            MessageBox.Show("P to pause, WASD to move" + "\r\n" +"collect all the hand sanitiser "
+            + "\r\n" + "and take it to the register to win");
+            //label for score
+            lblScore.Location = new Point(792, 12);
+            lblScore.Font = new Font("times new roman",16);
+            lblScore.Text = "Score";
             Controls.Add(lblScore);
             //player spawner
             Player = new Shop(800, 750, gs);
@@ -159,7 +163,6 @@ namespace _2mGame
             {
                 if (Player.shopRT.Bounds.IntersectsWith(yum[i].shopRT.Bounds))
                 {
-                    
                     count++;
                     yum[i].shopRT.Top = 2000; 
                     yum[i].shopRT.Left = 2000;

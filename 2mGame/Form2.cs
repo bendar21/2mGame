@@ -49,10 +49,11 @@ namespace _2mGame
         private void Form2_Load(object sender, EventArgs e)
         {
             //instruction messagebox
-            MessageBox.Show("OhNo we ran outta handsanitiser halfway through quarantine" + "\r\n" + "we'll need twice as much now that covid19 cases have quadrupled");
-            lblScore.Location = new Point(792, 24);
-            lblScore.Height = 100;
-            lblScore.Width = 100;
+            MessageBox.Show("OhNo we ran outta handsanitiser halfway through quarantine" +
+            "\r\n" + "we'll need twice as much now that covid19 cases have quadrupled");
+            //label for score
+            lblScore.Location = new Point(792, 12);
+            lblScore.Font = new Font("times new roman", 16);
             lblScore.Text = "Score";
             Controls.Add(lblScore);
             //player spawner
